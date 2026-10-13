@@ -99,6 +99,8 @@ details summary::-webkit-details-marker{display:none}
 </div>
 <div id="toast" class="toast" hidden></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/10.12.2/firebase-firestore-compat.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
@@ -133,7 +135,7 @@ async function boot(){
   const local=LS.get("roster");
   if(local&&local.classes&&local.classes.some(c=>c.students.length)){S.roster=local}else{S.roster=JSON.parse(JSON.stringify(DEMO_ROSTER))}S.demo=false;
   await loadDay();render();
-  S.db=null;
+  try{firebase.initializeApp({apiKey:"AIzaSyBMvigdfhcb0f9ng25MFT30-TgBUvMa5wc",authDomain:"claseera.firebaseapp.com",projectId:"claseera",storageBucket:"claseera.firebasestorage.app",messagingSenderId:"922572919373",appId:"1:922572919373:web:fec359e7537d32774a0204"});S.db=firebase.firestore()}catch(e){S.db=null}
   if(S.db){try{const r=await S.db.doc("app/roster").get();
       if(r.exists){S.roster=JSON.parse(JSON.stringify(r.data()));S.demo=false;LS.set("roster",S.roster)}
       else if(!S.demo){queue("app/roster",S.roster)}
